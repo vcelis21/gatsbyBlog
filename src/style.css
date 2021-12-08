@@ -331,3 +331,7 @@ a:focus {
     list-style-position: inside;
   }
 }
+
+#Saludo{
+  border: solid #005b99 
+}
