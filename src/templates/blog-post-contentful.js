@@ -4,6 +4,31 @@ import { Link, graphql } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+import "../style.css"
+import { BLOCKS, MARKS } from "@contentful/rich-text-types"
+import { renderRichText } from "gatsby-source-contentful/rich-text"
+
+const Bold = ({ children }) => <span className="bold">{children}</span>
+const Text = ({ children }) => <p className="align-center">{children}</p>
+
+const options = {
+  renderMark: {
+    [MARKS.BOLD]: text => <Bold>{text}</Bold>,
+  },
+  renderNode: {
+    [BLOCKS.PARAGRAPH]: (node, children) => <Text>{children}</Text>,
+    [BLOCKS.EMBEDDED_ASSET]: node => {
+      return (
+        <>
+          <h2>Embedded Asset</h2>
+          <pre>
+            <code>{JSON.stringify(node, null, 2)}</code>
+          </pre>
+        </>
+      )
+    },
+  },
+}
 
 const BlogPostContentfulTemplate = ({ data, location }) => {
   const post = data.contentfulPost
@@ -17,25 +42,21 @@ const BlogPostContentfulTemplate = ({ data, location }) => {
         description={post.subtitle || post.subtitle}
       />
       <article
-        className="blog-post"
+        className="blog-post "
         itemScope
         itemType="http://schema.org/Article"
       >
-        <header>
-          <h1 itemProp="headline">{post.title}</h1>
-          <h2 itemProp="headline">{post.subtitle}</h2>
-          
+        <header >
+          <h1 style={{ color: "#fff" }} itemProp="headline">{post.title}</h1>
+          <h2 style={{ color: "#fff" }} itemProp="headline">{post.subtitle}</h2>
         </header>
-        
-        <section
-          dangerouslySetInnerHTML={{ __html: post.content.raw }}
-          itemProp="articleBody"
-        />
+        {renderRichText(post.content, options)}
         <hr />
         <footer>
-        <Bio />
+          <Bio />
         </footer>
       </article>
+
       <nav className="blog-post-nav">
         <ul
           style={{
@@ -44,6 +65,7 @@ const BlogPostContentfulTemplate = ({ data, location }) => {
             justifyContent: `space-between`,
             listStyle: `none`,
             padding: 0,
+            color: `white`,
           }}
         >
           <li>
@@ -62,6 +84,9 @@ const BlogPostContentfulTemplate = ({ data, location }) => {
           </li>
         </ul>
       </nav>
+
+
+
     </Layout>
   )
 }
