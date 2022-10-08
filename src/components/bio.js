@@ -9,14 +9,14 @@ import * as React from "react"
 
 
 const Bio = () => {
-return (
+  return (
 
-<p style={{fontFamily: 'courier,arial,helvética'}}>
-  Development by RGAsesores
-</p>
+    <p style={{ fontFamily: 'courier,arial,helvética' }}>
+      GTPro is everything your soul needs and everything you imagined
+    </p>
 
 
-)
+  )
 }
 
 export default Bio

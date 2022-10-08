@@ -1,10 +1,12 @@
 import * as React from "react"
+// import { useState } from "react"
 import { Link, graphql } from "gatsby"
 
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import "../style.css"
+import Img from "gatsby-image"
 
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
@@ -12,7 +14,7 @@ const BlogIndex = ({ data, location }) => {
 
   if (posts.length === 0) {
     return (
-      <Layout location={location} title={siteTitle}>
+      <Layout location={location} title={siteTitle} className="titleGatsby">
         <Seo title="All posts" />
         <Bio />
         <p>
@@ -24,80 +26,51 @@ const BlogIndex = ({ data, location }) => {
     )
   }
 
-  
+  class ShowImage extends React.Component {
 
-/*    function HelloWorld (props){
-     return(
-       <div id="Saludo">Hola {props.text} Cómo te va el día de hoy</div>
-     )
-   } */
-  
-
-  class HelloWorld extends React.Component {
-    
     state = {
       show: true
     }
 
     toggleshow = () => {
-
-      this.setState({show: !this.state.show }) //Es una forma más rápida
-
-      /* if(this.state.show){
-        this.setState({ show: false })
-      }else{
-        this.setState({ show: true })
-      } */
-      
+      this.setState({ show: !this.state.show }) //Es una forma más rápida
     }
-
-    /*Otra forma más complicada es ocupar toogleshow.bind(this)
-    solamente tenemos que modificar 
-    
-    toggleshow () {
-      if(this.state.show){
-        this.setState({ show: false })
-      }else{
-        this.setState({ show: true })
-      }
-      
-    }
-
-    */
 
     render() {
-      if(this.state.show){
-        return(
-          <div id="Saludo">Hola {this.props.text} Cómo te va el día de hoy<br></br><br></br>
-          
-          <button onClick={ 
-            //alert('Gracias por modificar')& 
-            this.toggleshow
-            
-            }> Ocultar </button>
-          
-          </div>
-          
+      if (this.state.show) {
+        return (
+          <div >Esta pelicula es del author {this.props.author} <br></br><br></br>
+
+            <button onClick={
+              this.toggleshow
+            }> Ver Imágen </button>
+          </div >
+
         )
-      }else{
-       return <><h4>No tiene ningun Dato</h4>
-       <button onClick={ 
-        //alert('Gracias por modificar') &
-        this.toggleshow }> Mostrar </button></>
-       
+      } else {
+        if (this.props.image) {
+          return (
+            <><Img fluid={this.props.image.fluid} className="" /><br></br>
+              <button onClick={this.toggleshow}> Ocultar Imágen </button></>
+          )
+        } else {
+          return (
+            <><h4>No se ha subido ninguna Imágen</h4><br></br>
+              <button onClick={this.toggleshow}> Ocultar Imágen </button></>
+          )
+        }
       }
-      
     }
-      
   }
-   
+
 
   return (
     <Layout location={location} title={siteTitle}>
       <Seo title="All posts" />
       <Bio />
       <ol style={{ listStyle: `none` }}>
-        {posts.map( ({node}) => {
+        {posts.map(({ node }) => {
+          { console.log(node) }
           const title = node.title || node.slug
 
           return (
@@ -111,16 +84,19 @@ const BlogIndex = ({ data, location }) => {
                   <h2>
                     <Link to={node.slug} itemProp="url">
                       <span itemProp="headline">{title}</span>
-                    </Link>           
+                    </Link>
                   </h2>
                   <small>{node.date}</small>
                   <h4>
-                    <HelloWorld text="Juan"/>
+                    <ShowImage
+                      image={node.image}
+                      author={node.author}
+                    />
                   </h4>
                 </header>
                 <section>
                   <p
-                   
+
                   />
                 </section>
               </article>
@@ -135,13 +111,12 @@ const BlogIndex = ({ data, location }) => {
 export default BlogIndex
 
 export const pageQuery = graphql`
-  query {
+ query {
     site {
       siteMetadata {
         title
       }
     }
-    
     allContentfulPost {
       edges {
         node {
@@ -149,10 +124,16 @@ export const pageQuery = graphql`
           subtitle
           slug
           author
+          content{
+            raw
+					}
+          image{
+              fluid(maxWidth: 1280 , quality: 100, maxHeight: 720){
+                ...GatsbyContentfulFluid_withWebp
+              }
+          }
         }
       }
-    }
-
-    
+    }    
   }
 `
