@@ -37,29 +37,34 @@ const BlogIndex = ({ data, location }) => {
     }
 
     render() {
-      if (this.state.show) {
-        return (
-          <div >Esta pelicula es del author {this.props.author} <br></br><br></br>
+      return (
+        <><Img fluid={this.props.image.fluid} className="image" /><br></br>
+          {/* <button onClick={this.toggleshow}> Ocultar Imágen </button> */}
+        </>
+      )
+      // if (this.state.show) {
+      //   return (
+      //     <div >Esta pelicula es del author {this.props.author} <br></br><br></br>
 
-            <button onClick={
-              this.toggleshow
-            }> Ver Imágen </button>
-          </div >
+      //       <button onClick={
+      //         this.toggleshow
+      //       }> Ver Imágen </button>
+      //     </div >
 
-        )
-      } else {
-        if (this.props.image) {
-          return (
-            <><Img fluid={this.props.image.fluid} className="" /><br></br>
-              <button onClick={this.toggleshow}> Ocultar Imágen </button></>
-          )
-        } else {
-          return (
-            <><h4>No se ha subido ninguna Imágen</h4><br></br>
-              <button onClick={this.toggleshow}> Ocultar Imágen </button></>
-          )
-        }
-      }
+      //   )
+      // } else {
+      //   if (this.props.image) {
+      //     return (
+      //       <><Img fluid={this.props.image.fluid} className="" /><br></br>
+      //         <button onClick={this.toggleshow}> Ocultar Imágen </button></>
+      //     )
+      //   } else {
+      //     return (
+      //       <><h4>No se ha subido ninguna Imágen</h4><br></br>
+      //         <button onClick={this.toggleshow}> Ocultar Imágen </button></>
+      //     )
+      //   }
+      // }
     }
   }
 
